@@ -21,13 +21,9 @@ def call_openrouter_gpt(prompt):
         "max_tokens": 800
     }
 
-    try:
-        response = requests.post(
-    "https://openrouter.ai/api/v1/chat/completions",  # ✅ Correct endpoint
-    headers=headers,
-    json=data
-)
-response_json = response.json()
+   try:
+        response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=data)
+        response_json = response.json()
 
         # Debug logs
         print("📨 Sent Prompt:\n", prompt)
