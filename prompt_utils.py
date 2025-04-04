@@ -4,7 +4,6 @@ def build_dynamic_prompt(user_data, day_range="1-7"):
     gender = user_data.get("gender")
     bmi = user_data.get("bmi")
 
-    # Include workout if any field is selected
     workout_instruction = ""
     if user_data.get("workout_type") or user_data.get("workout_frequency"):
         workout_instruction = f"- Add daily workout suggestions based on user preference: {user_data.get('workout_type', 'Not specified')} ({user_data.get('workout_frequency', 'Not specified')})"
