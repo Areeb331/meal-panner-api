@@ -5,8 +5,7 @@ import requests
 # from dotenv import load_dotenv
 # load_dotenv()
 
-OPENROUTER_API_KEY = "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"
-
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 print("🔑 OpenRouter API Key:", OPENROUTER_API_KEY)  # ✅ Add this line to debug
 
 def call_openrouter_gpt(prompt):
