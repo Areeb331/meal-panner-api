@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
+print("🔐 ENV KEY LOADED:", bool(OPENROUTER_API_KEY))
+
 def call_openrouter_gpt(prompt):
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
@@ -13,22 +15,20 @@ def call_openrouter_gpt(prompt):
     }
 
     data = {
-        "model": "gpt-3.5-turbo",  # Change to "gpt-4" if needed and supported
+        "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
-        "max_tokens": 800  # Short limit to avoid quota/token issues
+        "max_tokens": 800
     }
 
     try:
         response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=data)
         response_json = response.json()
 
-        # ✅ Handle error from OpenRouter
         if "error" in response_json:
             print("❌ GPT API error:", response_json["error"])
             return "⚠️ GPT could not generate a meal plan. Please try again."
 
-        # ✅ Success case
         if "choices" in response_json and response_json["choices"]:
             content = response_json["choices"][0]["message"]["content"]
             print("🤖 GPT Response Content:\n", content)
