@@ -34,8 +34,9 @@ def generate_meal_plan():
 
         full_plan = f"{response_1.strip()}\n\n{response_2.strip()}"
 
-        if "Invalid:" in full_plan or "sample" in full_plan.lower():
-            return jsonify({'meal_plan': "⚠️ GPT could not generate a meal plan. Please try again."}), 400
+        if not full_plan or len(full_plan) < 100:
+    return jsonify({'meal_plan': "⚠️ GPT response was empty or too short. Try again."}), 400
+
 
         return jsonify({'meal_plan': full_plan})
 
