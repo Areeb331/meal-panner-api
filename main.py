@@ -17,28 +17,32 @@ def index():
 @app.route('/generate-meal-plan', methods=['POST'])
 def generate_meal_plan():
     user_data = request.get_json()
-    print("📦 Received user_data:", user_data)  # Debug log in Railway deploy logs
+    print("📦 Received user_data:", user_data)
 
     try:
-        # --- Build GPT Prompts ---
         prompt_1 = build_dynamic_prompt(user_data, day_range="1-4")
+        print("📨 Prompt 1:\n", prompt_1)
+
         response_1 = call_openrouter_gpt(prompt_1)
+        print("🤖 Response 1:\n", response_1)
 
         prompt_2 = build_dynamic_prompt(user_data, day_range="5-7")
-        response_2 = call_openrouter_gpt(prompt_2)
+        print("📨 Prompt 2:\n", prompt_2)
 
-        # --- Combine GPT Responses ---
+        response_2 = call_openrouter_gpt(prompt_2)
+        print("🤖 Response 2:\n", response_2)
+
         full_plan = f"{response_1.strip()}\n\n{response_2.strip()}"
 
-        # --- Final Check for Errors ---
-     # ---   if "Invalid:" in full_plan or "sample" in full_plan.lower(): ---
-           # --- return jsonify({'meal_plan': "⚠️ GPT could not generate a complete meal plan. Please try again."}), 400 ---
+        if "Invalid:" in full_plan or "sample" in full_plan.lower():
+            return jsonify({'meal_plan': "⚠️ GPT could not generate a meal plan. Please try again."}), 400
 
         return jsonify({'meal_plan': full_plan})
 
     except Exception as e:
-        print("❌ Server Error:", str(e))  # Log error
+        print("❌ Server Error:", str(e))
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
