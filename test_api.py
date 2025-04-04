@@ -1,6 +1,6 @@
 import requests
 
-url = "https://meal-panner-api-production-eccb.up.railway.app/generate-meal-plan"
+url = "https://meal-panner-api-production-e2b2.up.railway.app/generate-meal-plan"
 
 data = {
     "age": 22,
