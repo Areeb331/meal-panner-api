@@ -22,7 +22,7 @@ def call_openrouter_gpt(prompt):
     }
 
     try:
-response = requests.post(
+        response = requests.post(
     "https://openrouter.ai/api/v1/chat/completions",  # ✅ Correct endpoint
     headers=headers,
     json=data
