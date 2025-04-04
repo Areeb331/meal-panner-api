@@ -43,6 +43,5 @@ def generate_meal_plan():
         print("❌ Server Error:", str(e))
         return jsonify({'error': str(e)}), 500
 
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
