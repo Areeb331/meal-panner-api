@@ -7,6 +7,9 @@ import requests
 
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
+# ✅ Debug print — only shows first 6 characters to confirm loading
+print("🔑 OpenRouter API Key:", OPENROUTER_API_KEY[:6] + "..." if OPENROUTER_API_KEY else "❌ Not Found")
+
 def call_openrouter_gpt(prompt):
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
