@@ -1,6 +1,6 @@
 import requests
 
-url = "https://54b178d5-2fed-48c7-8ce8-4dd58eba4050-00-3g07b08jmfbr4.sisko.replit.dev/generate-meal-plan"
+url = "https://meal-panner-api-production.up.railway.app/generate-meal-plan"
 
 data = {
     "age": 22,
