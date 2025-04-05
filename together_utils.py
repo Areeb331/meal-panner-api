@@ -14,7 +14,7 @@ def call_together_gpt(prompt):
     }
 
     payload = {
-        "model": "meta-llama/Llama-2-70b-chat-hf",
+        "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",  # ✅ use a supported model
         "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 1024,
         "temperature": 0.7
