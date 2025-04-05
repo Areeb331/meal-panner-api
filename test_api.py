@@ -3,6 +3,7 @@ import requests
 url = "https://meal-panner-api-production-e2b2.up.railway.app/generate-meal-plan"
 
 data = {
+    "uid": "HcmwFSXX9TbI5t2Ax7sILSG9ZbB2",  # ✅ Replace with your actual UID
     "age": 22,
     "goal": "Gain weight",
     "gender": "Female",
