@@ -10,27 +10,22 @@ from datetime import datetime
 import json
 import re
 
-# Load .env
+# Load env
 load_dotenv()
 
-# Flask app init
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Firebase Admin SDK Initialization from Railway ENV variable
-if not firebase_admin._apps:
-    firebase_key_str = os.getenv("FIREBASE_KEY")
-    if not firebase_key_str:
-        raise Exception("FIREBASE_KEY environment variable not set")
-    
-    firebase_key_dict = json.loads(firebase_key_str)
-    cred = credentials.Certificate(firebase_key_dict)
+# Load Firebase key from Railway variable
+firebase_key = os.getenv("FIREBASE_KEY")
+if firebase_key and not firebase_admin._apps:
+    cred_dict = json.loads(firebase_key)
+    cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
 
-# Firestore client
 db = firestore.client()
 
-# 🔍 Extract macros from GPT response
+# Helper to extract macros
 def extract_macros(text):
     match = re.search(
         r'Total Daily Nutrition:.*?Calories:\s*(\d+)\s*kcal.*?Protein:\s*(\d+)\s*g.*?Carbs:\s*(\d+)\s*g.*?Fats:\s*(\d+)\s*g',
@@ -45,12 +40,10 @@ def extract_macros(text):
         }
     return None
 
-# ✅ Index route
 @app.route('/')
 def index():
-    return '✅ Flask is live! Use /generate-meal-plan to POST.'
+    return '✅ Flask API is live on Together.ai!'
 
-# ✅ Meal plan generation route
 @app.route('/generate-meal-plan', methods=['POST'])
 def generate_meal_plan():
     user_data = request.get_json()
@@ -60,14 +53,12 @@ def generate_meal_plan():
     if not uid:
         return jsonify({"error": "UID missing"}), 400
 
-    # Check if today's plan already exists
     meal_ref = db.collection("users").document(uid).collection("meal_plans").document(today)
     existing = meal_ref.get()
     if existing.exists:
         return jsonify({'meal_plan': existing.to_dict().get("plan", "No plan found")})
 
     try:
-        # GPT prompts (split in 2 to avoid token limits)
         prompt_1 = build_dynamic_prompt(user_data, day_range="1-4")
         response_1 = call_together_gpt(prompt_1)
 
@@ -76,13 +67,11 @@ def generate_meal_plan():
 
         full_plan = f"{response_1.strip()}\n\n{response_2.strip()}"
 
-        if not full_plan or len(full_plan) < 100:
+        if not full_plan or "could not" in full_plan.lower() or len(full_plan) < 100:
             return jsonify({'meal_plan': "⚠️ GPT could not generate a meal plan. Please try again."}), 400
 
-        # Nutrition extraction
         macros = extract_macros(full_plan) or {"calories": 0, "protein": 0, "carbs": 0, "fats": 0}
 
-        # Goals + actuals
         goals = {
             "calories_goal": int(user_data.get("calories_goal", 2200)),
             "protein_goal": int(user_data.get("protein_goal", 120)),
@@ -94,7 +83,6 @@ def generate_meal_plan():
             "fats": macros["fats"]
         }
 
-        # Save plan + progress
         db.collection("users").document(uid).collection("daily_progress").document(today).set(goals, merge=True)
         meal_ref.set({"plan": full_plan}, merge=True)
 
@@ -105,6 +93,5 @@ def generate_meal_plan():
         print("❌ Server Error:", str(e))
         return jsonify({'error': str(e)}), 500
 
-# ✅ Start Flask server
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
