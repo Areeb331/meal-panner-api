@@ -10,13 +10,10 @@ from datetime import datetime
 import json
 import re
 
-# Load env
 load_dotenv()
-
 app = Flask(__name__)
 CORS(app)
 
-# Load Firebase key from Railway variable
 firebase_key = os.getenv("FIREBASE_KEY")
 if firebase_key and not firebase_admin._apps:
     cred_dict = json.loads(firebase_key)
@@ -25,7 +22,6 @@ if firebase_key and not firebase_admin._apps:
 
 db = firestore.client()
 
-# Helper to extract macros
 def extract_macros(text):
     match = re.search(
         r'Total Daily Nutrition:.*?Calories:\s*(\d+)\s*kcal.*?Protein:\s*(\d+)\s*g.*?Carbs:\s*(\d+)\s*g.*?Fats:\s*(\d+)\s*g',
