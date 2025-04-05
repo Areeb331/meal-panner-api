@@ -7,20 +7,17 @@ import os
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime
-import json
 
-# Load .env
+# Load environment variables
 load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
-# Firebase Setup from ENV variable 🔐
+# ✅ Firebase Setup from JSON file
 if not firebase_admin._apps:
-    firebase_json = os.getenv("FIREBASE_KEY_JSON")
-    firebase_dict = json.loads(firebase_json)
-    cred = credentials.Certificate(firebase_dict)
+    cred = credentials.Certificate("firebase_service_key.json")
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -35,7 +32,6 @@ def generate_meal_plan():
     print("📦 Received user_data:", user_data)
 
     try:
-        # Build GPT prompts
         prompt_1 = build_dynamic_prompt(user_data, day_range="1-4")
         response_1 = call_openrouter_gpt(prompt_1)
 
@@ -47,7 +43,6 @@ def generate_meal_plan():
         if not full_plan or len(full_plan) < 100:
             return jsonify({'meal_plan': "⚠️ GPT response was empty or too short. Try again."}), 400
 
-        # Firestore: Save daily progress template
         uid = user_data.get("uid")
         goals = {
             "calories_goal": int(user_data.get("calories_goal", 2200)),
