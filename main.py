@@ -14,6 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+# Firebase setup via env variable
 firebase_key = os.getenv("FIREBASE_KEY")
 if firebase_key and not firebase_admin._apps:
     cred_dict = json.loads(firebase_key)
@@ -38,7 +39,7 @@ def extract_macros(text):
 
 @app.route('/')
 def index():
-    return '✅ Flask API is live on Together.ai!'
+    return '✅ Flask API is running with Together.ai'
 
 @app.route('/generate-meal-plan', methods=['POST'])
 def generate_meal_plan():
@@ -67,7 +68,6 @@ def generate_meal_plan():
             return jsonify({'meal_plan': "⚠️ GPT could not generate a meal plan. Please try again."}), 400
 
         macros = extract_macros(full_plan) or {"calories": 0, "protein": 0, "carbs": 0, "fats": 0}
-
         goals = {
             "calories_goal": int(user_data.get("calories_goal", 2200)),
             "protein_goal": int(user_data.get("protein_goal", 120)),
