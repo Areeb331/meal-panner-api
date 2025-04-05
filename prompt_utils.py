@@ -23,7 +23,7 @@ def build_dynamic_prompt(user_data, day_range="1-7"):
     # 🏋️‍♂️ Workout
     workout_instruction = ""
     if user_data.get("workout_type") or user_data.get("workout_frequency"):
-        workout_instruction = f"- Add workout suggestion: {user_data.get('workout_type', 'Not specified')} ({user_data.get('workout_frequency', 'Not specified')})"
+        workout_instruction = f"- Include one short workout suggestion per day: {user_data.get('workout_type', '')} ({user_data.get('workout_frequency', '')})"
 
     # 🍽️ Preferences
     preferences = []
@@ -47,8 +47,9 @@ def build_dynamic_prompt(user_data, day_range="1-7"):
 
     pref_text = "\n".join(f"- {p}" for p in preferences)
 
+    # 👇 The magic: Clean prompt to avoid recipes and ensure full 7 days
     return f"""
-You are a certified AI dietitian. Create a professional 7-day meal plan for Days {day_range}. Follow these rules:
+You are a certified AI dietitian. Create a **strictly structured 7-day meal plan** for Days {day_range}. Follow these rules exactly:
 
 User Info:
 - Goal: {goal}
@@ -56,19 +57,26 @@ User Info:
 - Preferences:
 {pref_text}
 
-Instructions:
-- Each day must include exactly 3 meals: Breakfast, Lunch, Dinner
-- Each meal must include: Calories (kcal), Protein (g), Carbs (g), Fats (g)
-- After each day, include: Total Daily Nutrition: Calories: ___ kcal, Protein: ___g, Carbs: ___g, Fats: ___g
-- Do NOT include recipes or cooking steps. Just provide the meal name and its calories, protein, fats, and carbs.
-{workout_instruction}
-- Respect food dislikes and allergies strictly
-- Do not mention BMR, TDEE, or give generic advice like "consult a dietitian"
-- Do not include disclaimers or say "this is a sample"
-- Return full details for **all** Days {day_range}
-- please add workout if user select to workout
+Meal Plan Rules:
+- Provide exactly 7 full days of meals. Each day MUST start with "Day X:"
+- Each day must contain exactly 3 meals: Breakfast, Lunch, Dinner
+- Each meal must include nutritional info:
+  - Calories (kcal), Protein (g), Carbs (g), Fats (g)
+- End each day with: 
+  Total Daily Nutrition: Calories: ___ kcal, Protein: ___g, Carbs: ___g, Fats: ___g
+- DO NOT include:
+  - Any recipes, cooking steps, ingredients list, or preparation tips
+  - Disclaimers or statements like “consult a dietitian”
+  - BMR, TDEE, macros calculations
+  - “Here’s your meal plan” style intro
+  - Anything outside Day {day_range.split("-")[0]} to Day {day_range.split("-")[1]}
 
-Start with:
+Additional Instructions:
+{workout_instruction}
+- Respect food dislikes and allergies completely.
+- Keep each day's content concise and strictly formatted.
+
+Start directly like this:
 Day {day_range.split("-")[0]}:
 Breakfast: ...
 Calories: ..., Protein: ..., Carbs: ..., Fats: ...
