@@ -4,6 +4,21 @@ def build_dynamic_prompt(user_data, day_range="1-7"):
     gender = user_data.get("gender")
     bmi = user_data.get("bmi")
 
+    # 🔄 Map alternate keys
+    key_mapping = {
+        "protein_sources": "protein_choices",
+        "carb_sources": "carb_choices",
+        "fat_sources": "fats_choices",
+        "fruits": "fruit_choices",
+        "vegetables": "vegetable_choices",
+        "beverages": "beverage_preference",
+        "preferred_cooking_style": "cooking_styles",
+        "sweet_frequency": "dessert_frequency"
+    }
+    for old, new in key_mapping.items():
+        if old in user_data:
+            user_data[new] = user_data.pop(old)
+
     workout_instruction = ""
     if user_data.get("workout_type") or user_data.get("workout_frequency"):
         workout_instruction = f"- Add daily workout suggestions based on user preference: {user_data.get('workout_type', 'Not specified')} ({user_data.get('workout_frequency', 'Not specified')})"
@@ -41,7 +56,7 @@ Instructions:
 {workout_instruction}
 - If beverage preferences are given, include them in meals or as drinks.
 - Do not include disclaimers, BMR, TDEE, or generic suggestions like "consult a dietitian".
-- DO NOT say: “This is a sample plan” or add notes at the end.
+- DO NOT say: \u201cThis is a sample plan\u201d or add notes at the end.
 - Return full details for Days {day_range}. Do NOT leave any day or meal incomplete.
 - Ensure all ingredients respect allergies and dislikes.
 - Include workout suggestions if given.
