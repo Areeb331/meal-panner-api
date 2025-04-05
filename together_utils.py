@@ -6,7 +6,7 @@ TOGETHER_API_URL = "https://api.together.xyz/v1/chat/completions"
 
 def call_together_gpt(prompt):
     if not TOGETHER_API_KEY:
-        return "❌ TOGETHER_API_KEY not set"
+        return "\u274c TOGETHER_API_KEY not set"
 
     headers = {
         "Authorization": f"Bearer {TOGETHER_API_KEY}",
@@ -25,5 +25,5 @@ def call_together_gpt(prompt):
         response.raise_for_status()
         return response.json()["choices"][0]["message"]["content"]
     except Exception as e:
-        print("❌ GPT API Error:", str(e))
-        return "⚠️ GPT could not generate a meal plan. Please try again."
+        print("\u274c GPT API Error:", str(e))
+        return "\u26a0\ufe0f GPT could not generate a meal plan. Please try again."
