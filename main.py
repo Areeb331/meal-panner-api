@@ -17,14 +17,18 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Firebase Admin SDK Initialization from local file
+# ✅ Firebase Admin SDK Initialization from FIREBASE_KEY env var
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase_service_key.json")  # Local JSON file
+    firebase_key_json = os.environ.get("FIREBASE_KEY")
+    if not firebase_key_json:
+        raise Exception("FIREBASE_KEY environment variable not found!")
+    cred_dict = json.loads(firebase_key_json)
+    cred = credentials.Certificate(cred_dict)
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-# 🔍 Helper to extract macros (calories, protein, etc.) from GPT response
+# 🔍 Extract macros (calories, protein, etc.) from GPT output
 def extract_macros(text):
     match = re.search(
         r'Total Daily Nutrition:.*?Calories:\s*(\d+)\s*kcal.*?Protein:\s*(\d+)\s*g.*?Carbs:\s*(\d+)\s*g.*?Fats:\s*(\d+)\s*g',
