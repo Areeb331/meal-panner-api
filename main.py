@@ -7,20 +7,36 @@ import os
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime
+import json
+import re
 
-# Load environment variables
+# Load .env
 load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
-# ✅ Firebase Setup from JSON file
+# Firebase Setup from ENV variable
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase_service_key.json")
+    firebase_json = os.environ.get("FIREBASE_KEY_JSON")
+    firebase_dict = json.loads(firebase_json)
+    cred = credentials.Certificate(firebase_dict)
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
+# Helper to extract macros from GPT response
+def extract_macros(text):
+    match = re.search(r'Total Daily Nutrition:.*?Calories:\s*(\d+)\s*kcal.*?Protein:\s*(\d+)\s*g.*?Carbs:\s*(\d+)\s*g.*?Fats:\s*(\d+)\s*g', text, re.IGNORECASE)
+    if match:
+        return {
+            "calories": int(match.group(1)),
+            "protein": int(match.group(2)),
+            "carbs": int(match.group(3)),
+            "fats": int(match.group(4))
+        }
+    return None
 
 @app.route('/')
 def index():
@@ -29,9 +45,21 @@ def index():
 @app.route('/generate-meal-plan', methods=['POST'])
 def generate_meal_plan():
     user_data = request.get_json()
-    print("📦 Received user_data:", user_data)
+    uid = user_data.get("uid")
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    if not uid:
+        return jsonify({"error": "UID is missing"}), 400
+
+    # ⛔ Check if today's meal plan already exists
+    meal_ref = db.collection("users").document(uid).collection("meal_plans").document(today)
+    existing = meal_ref.get()
+    if existing.exists:
+        print("✅ Reusing existing meal plan from Firestore")
+        return jsonify({'meal_plan': existing.to_dict().get("plan", "📄 No plan found")})
 
     try:
+        # Build and call GPT
         prompt_1 = build_dynamic_prompt(user_data, day_range="1-4")
         response_1 = call_openrouter_gpt(prompt_1)
 
@@ -41,24 +69,30 @@ def generate_meal_plan():
         full_plan = f"{response_1.strip()}\n\n{response_2.strip()}"
 
         if not full_plan or len(full_plan) < 100:
-            return jsonify({'meal_plan': "⚠️ GPT response was empty or too short. Try again."}), 400
+            return jsonify({'meal_plan': "⚠️ GPT response was too short. Try again."}), 400
 
-        uid = user_data.get("uid")
+        # 🧠 Extract macros from GPT plan
+        macros = extract_macros(full_plan)
+        if macros is None:
+            macros = {"calories": 0, "protein": 0, "carbs": 0, "fats": 0}
+
+        # 🎯 Get user's goals from request
         goals = {
             "calories_goal": int(user_data.get("calories_goal", 2200)),
             "protein_goal": int(user_data.get("protein_goal", 120)),
-            "fats_goal": int(user_data.get("fats_goal", 70)),
             "carbs_goal": int(user_data.get("carbs_goal", 300)),
-            "calories": 0,
-            "protein": 0,
-            "fats": 0,
-            "carbs": 0
+            "fats_goal": int(user_data.get("fats_goal", 70)),
+
+            "calories": macros["calories"],
+            "protein": macros["protein"],
+            "carbs": macros["carbs"],
+            "fats": macros["fats"]
         }
 
-        if uid:
-            today = datetime.now().strftime("%Y-%m-%d")
-            db.collection("users").document(uid).collection("daily_progress").document(today).set(goals, merge=True)
-            print(f"✅ Daily goals saved for UID {uid} on {today}")
+        # 🔥 Save to Firestore
+        db.collection("users").document(uid).collection("daily_progress").document(today).set(goals, merge=True)
+        meal_ref.set({"plan": full_plan}, merge=True)
+        print(f"✅ Meal Plan + Progress saved for UID: {uid} on {today}")
 
         return jsonify({'meal_plan': full_plan})
 
