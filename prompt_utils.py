@@ -60,11 +60,13 @@ Instructions:
 - Each day must include exactly 3 meals: Breakfast, Lunch, Dinner
 - Each meal must include: Calories (kcal), Protein (g), Carbs (g), Fats (g)
 - After each day, include: Total Daily Nutrition: Calories: ___ kcal, Protein: ___g, Carbs: ___g, Fats: ___g
+- Do NOT include recipes or cooking steps. Just provide the meal name and its calories, protein, fats, and carbs.
 {workout_instruction}
 - Respect food dislikes and allergies strictly
 - Do not mention BMR, TDEE, or give generic advice like "consult a dietitian"
 - Do not include disclaimers or say "this is a sample"
 - Return full details for **all** Days {day_range}
+- please add workout if user select to workout
 
 Start with:
 Day {day_range.split("-")[0]}:
