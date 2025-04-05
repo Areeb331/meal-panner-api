@@ -14,7 +14,7 @@ def call_openrouter_gpt(prompt):
         "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
-        "max_tokens": 700  # ✅ Reduced to avoid OpenRouter free limit error
+        "max_tokens": 470  # ✅ Reduced to avoid OpenRouter free limit error
     }
 
     try:
