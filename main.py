@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# Firebase setup via env variable
+# Firebase setup via Railway variable
 firebase_key = os.getenv("FIREBASE_KEY")
 if firebase_key and not firebase_admin._apps:
     cred_dict = json.loads(firebase_key)
@@ -23,6 +23,7 @@ if firebase_key and not firebase_admin._apps:
 
 db = firestore.client()
 
+# Extract daily macros
 def extract_macros(text):
     match = re.search(
         r'Total Daily Nutrition:.*?Calories:\s*(\d+)\s*kcal.*?Protein:\s*(\d+)\s*g.*?Carbs:\s*(\d+)\s*g.*?Fats:\s*(\d+)\s*g',
