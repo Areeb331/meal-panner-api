@@ -1,12 +1,8 @@
 import os
 import requests
 
-# 🚫 DO NOT use load_dotenv() on Railway — use os.environ directly
-# from dotenv import load_dotenv
-# load_dotenv()
-
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
-print("🔑 OpenRouter API Key:", OPENROUTER_API_KEY)  # ✅ Add this line to debug
+print("🔑 OpenRouter API Key:", OPENROUTER_API_KEY)
 
 def call_openrouter_gpt(prompt):
     headers = {
@@ -18,7 +14,7 @@ def call_openrouter_gpt(prompt):
         "model": "gpt-3.5-turbo",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
-        "max_tokens": 800
+        "max_tokens": 700  # ✅ Reduced to avoid OpenRouter free limit error
     }
 
     try:
