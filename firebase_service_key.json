@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "nutriplanner-cc9eb",
+  "private_key_id": "a3a5df4e55e1fad1e3d31b851d8d3a9033d05d25",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC6hiaezIpG0mQK\nYbX7kGBEP+0hLX3BFH33whsQTK5Kb4fLtxNDuuLFAmsHI1J9RkFLeTnBNn3GU9el\nPccLKN9RoKl2xEeLC6ZZIpUTmxB+xdq+xmJK4biLkFesMzTEdHWVWX/MFp3PWkMM\n/0CdKpRpT8/Rz6h8cJ11F9cjBEbTLxNUqUxc+7j/0LxnX4wBILw+RSThLPwN3ln+\nCSSjfpOOFoWbV65QUBBmuLoC4vSOvbm1/B5xsN9jhS3LihWnnAkjORyS8dCb/AhO\nHHz5LZhDlex7GEkmlcYzvAfm/wGTqt8ZUPrjBCR747WgCAiR3hDanqHyxvZtC0Ul\nO004asqtAgMBAAECgf9XH5Byl5QolTs1a3VuMu9X5jEpD9haYweNI4nBODBMlHaE\nMjIN+PEV+0KD68/4O/2Gn5f3WVnwvLMUgtR4bX6ojVUErMVtZIJ/RN9Rqe5Ix6DT\n4N0dX949gHOqfuH/p8AYpl24KTR9BuOJFT3PRPiX7mzOmE5wBGYSMieeMUDoXAW+\nddQNFg4/VtB2AJqSQd6iUnXY7Glk/Q9HWDcFr3o3exQPEoh6F+fk8PvUtu/f/2bs\nf3H+LcyCIp6tnudOter9A8MGfTXWH0KU4aWd47ncs/cAf5AY0/qdKewBk0Tvj3TD\nkRjVVVwSIueOY5cIImve2OeiChbzorz6xkwHF4UCgYEA2+2Wq1k/AQCAVB6AdK/E\neeExMngdLJ5QeAgu80BicOZiNlXohKBeFe9GUCMXFK6nbgUToPweISwncJngi5Sv\n7Xz9w7yNRTyTJlvPDK7rsrL1fTLIN/yxNVMv1n36B/opAMZhpWXcgrL+uIDog/Eq\nwHjuNBoe7h/WOEV7HZxCE+MCgYEA2R37ao1IxDmVnOxgXr6rYGoNfucNyjQGiTAG\ncSMYtnNj7M/EiK13TUsQ8jO5hxZit3Z9O+5r+lRIrEX/Lt0lZA/R0jkWrb102KXf\nZc+yCDJMyi26HUZLoPsb+HA1wsB8MDe/qglM5/k6Md/tQEd9JklBcu6lxZE+KXip\nadtDjC8CgYBK85K4vMajEceqY2bF3a0pGF0K5TKUJTQpZCiUECo8bdekyuxeXsUR\n1qTw5LSWANvgu+wvnhyqk4CxeE+1Yiv+1O0rCxReN0Gy/fD3UpnTIfhV/buMkRrX\noI0aHX7bvx7AO9vFYYygIl57BLu5U7SNOel8ajaGUuVP8iX+NmWynwKBgGRFd4aX\nJ4MQQSuO81buYgGOGRuBpBm9e0NCfcckeVZR5lVJAzBIRK/aukHRZ56e1Qp724yh\nKRccc8+0KA1BrvIOaE3ZdcLZm6wutwSzLjqg2FwLUEgS3fzD3AAZ+oouEWzHYmoq\nD22W6ax9CXpFSeQzstlcpAyhbn8CreMok4KbAoGBAJHDaFSo6twKttpP8YFHx5eO\nncsfPsv3iCA4Zp/oBHG4O/MlAO7AIZNey6kXOLK2xhQONYCfYRUPl26vh9rb173V\nhrLzqyNzd2QWmLday5Cn++r+F1101gq9slgnpIYFF5v1qyX3sn6CAU/8qjfEXRNg\ny1NymKBcygS9C3UcfM+K\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@nutriplanner-cc9eb.iam.gserviceaccount.com",
+  "client_id": "103794596095135114640",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40nutriplanner-cc9eb.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
