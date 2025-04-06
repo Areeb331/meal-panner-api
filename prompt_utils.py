@@ -1,5 +1,5 @@
 def build_dynamic_prompt(user_data, day_range="1-7"):
-    # 🔄 Normalize keys if alternate names are passed
+    # 🔄 Normalize keys
     key_mapping = {
         "protein_sources": "protein_choices",
         "carb_sources": "carb_choices",
@@ -47,7 +47,6 @@ def build_dynamic_prompt(user_data, day_range="1-7"):
 
     pref_text = "\n".join(f"- {p}" for p in preferences)
 
-    # 👇 The magic: Clean prompt to avoid recipes and ensure full 7 days
     return f"""
 You are a certified AI dietitian. Create a **strictly structured 7-day meal plan** for Days {day_range}. Follow these rules exactly:
 
@@ -81,3 +80,9 @@ Day {day_range.split("-")[0]}:
 Breakfast: ...
 Calories: ..., Protein: ..., Carbs: ..., Fats: ...
 """.strip()
+
+
+def clean_response(text):
+    text = text.replace("**", "").replace("###", "")
+    text = re.sub(r"(?i)^here.*?plan:?\n?", "", text)
+    return text.strip()
