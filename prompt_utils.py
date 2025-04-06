@@ -1,3 +1,4 @@
+import re
 def build_dynamic_prompt(user_data, day_range="1-7"):
     # 🔄 Normalize keys
     key_mapping = {
