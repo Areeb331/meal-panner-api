@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
-from prompt_utils import build_dynamic_prompt
+from prompt_utils import build_dynamic_prompt, clean_response
 from together_utils import call_together_gpt
 import os
 import firebase_admin
@@ -36,6 +36,12 @@ def extract_macros(text):
         }
     return None
 
+def is_complete_7_day_plan(plan_text):
+    for i in range(1, 8):
+        if f"Day {i}:" not in plan_text:
+            return False
+    return True
+
 @app.route('/')
 def index():
     return '✅ Flask API is running with Together.ai'
@@ -56,15 +62,15 @@ def generate_meal_plan():
 
     try:
         prompt_1 = build_dynamic_prompt(user_data, day_range="1-4")
-        response_1 = call_together_gpt(prompt_1)
+        response_1 = clean_response(call_together_gpt(prompt_1))
 
         prompt_2 = build_dynamic_prompt(user_data, day_range="5-7")
-        response_2 = call_together_gpt(prompt_2)
+        response_2 = clean_response(call_together_gpt(prompt_2))
 
-        full_plan = f"{response_1.strip()}\n\n{response_2.strip()}"
+        full_plan = f"{response_1}\n\n{response_2}"
 
-        if not full_plan or "could not" in full_plan.lower() or len(full_plan) < 100:
-            return jsonify({'meal_plan': "⚠️ GPT could not generate a meal plan. Please try again."}), 400
+        if not is_complete_7_day_plan(full_plan):
+            return jsonify({'meal_plan': "⚠️ Meal plan is invalid or incomplete. Please regenerate."}), 400
 
         macros = extract_macros(full_plan) or {"calories": 0, "protein": 0, "carbs": 0, "fats": 0}
         goals = {
