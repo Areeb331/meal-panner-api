@@ -70,6 +70,10 @@ Meal Plan Rules:
   - BMR, TDEE, macros calculations
   - “Here’s your meal plan” style intro
   - Anything outside Day {day_range.split("-")[0]} to Day {day_range.split("-")[1]}
+  - Make sure each meal shows its nutrition like:
+    Calories: 550 kcal, Protein: 45g, Carbs: 55g, Fats: 12g 
+    Do not change this format. Always use this exact structure after each meal.
+
 
 Additional Instructions:
 {workout_instruction}
