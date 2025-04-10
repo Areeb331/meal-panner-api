@@ -60,6 +60,7 @@ User Info:
 Meal Plan Rules:
 - Provide exactly 7 full days of meals. Each day MUST start with "Day X:"
 - Each day must contain exactly 3 meals: Breakfast, Lunch, Dinner
+- Don't show any meals except these 3: Breakfast, Lunch, Dinner
 - Each meal must include nutritional info:
   - Calories (kcal), Protein (g), Carbs (g), Fats (g)
 - End each day with: 
