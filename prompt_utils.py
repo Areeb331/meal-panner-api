@@ -74,6 +74,8 @@ Meal Plan Rules:
   - Make sure each meal shows its nutrition like:
     Calories: 550 kcal, Protein: 45g, Carbs: 55g, Fats: 12g
     Do not change this format. Always use this exact structure after each meal.
+- If the user wants to gain weight, provide high-calorie food options.
+- If the user wants to lose weight, provide low-calorie food options.
 
 
 Additional Instructions:
